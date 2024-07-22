@@ -14,7 +14,7 @@ class RegisterView(View):
         return render(request, 'register.html', context=context)
 
     def post(self, request):
-        create_form = CreateUserForm(request.POST, request.FILES)
+        create_form = CreateUserForm(data=request.POST, files=request.FILES)
         if create_form.is_valid():
             create_form.save()
             return redirect('login')
@@ -33,7 +33,7 @@ class LoginView(View):
         if login_form.is_valid():
             user = login_form.get_user()
             login(request, user)
-            return redirect('landing_page')
+            return redirect('landing-page')
         else:
             context = {'form': login_form}
             return render(request, 'login.html', context=context)
@@ -42,7 +42,7 @@ class LoginView(View):
 class LogoutView(LoginRequiredMixin, View):
     def get(self, request):
         logout(request)
-        return redirect('landing_page')
+        return redirect('login')
 
 
 class ProfileView(View):
@@ -63,3 +63,5 @@ class ProfileUpdateView(View):
             form.save()
             return redirect('profile', pk=user.pk)
         return render(request, 'profile_update.html', {'user': user, 'form': form})
+
+
