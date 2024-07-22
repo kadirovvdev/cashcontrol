@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ControlMoney Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f7f7f7;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            background-color: #619170;
+        }
+        .navbar-brand, .nav-link {
+            color: #fff !important;
+        }
+        .container {
+            margin-top: 20px;
+        }
+        .card {
+            margin-bottom: 20px;
+        }
+        .total-amount {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        .expense-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .expense-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background-color: #fff;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .expense-item .icon {
+            width: 30px;
+            height: 30px;
+            background-color: #f1f1f1;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+        }
+        .expense-item .icon img {
+            width: 20px;
+            height: 20px;
+        }
+        .expense-item .description {
+            flex: 1;
+            text-align: left;
+        }
+        .expense-item .amount {
+            font-weight: bold;
+            color: #333;
+        }
+        .donut-chart {
+            width: 100%;
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#">ControlMoney</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'dashboard' %}">Expenses</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Income</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Reports</a>
+                </li>
+                <li class="nav-item">
+                    <button class="btn btn-light" onclick="{% url 'login' %}">Login</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Balance</h5>
+                        <p class="total-amount">UZS 90,800</p>
+                    </div>
+                </div>
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Income</h5>
+                        <p class="total-amount text-success">UZS 1200,000</p>
+                    </div>
+                </div>
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Expenses</h5>
+                        <p class="total-amount text-danger">UZS 29,200</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Expenses</h5>
+                        <div class="donut-chart" id="expenseChart"></div>
+                        <div class="expense-list">
+                            <div class="expense-item">
+                                <div class="icon"><img src="https://img.freepik.com/free-photo/delicious-coffee-beans-cup_23-2150691429.jpg?size=626&ext=jpg&ga=GA1.1.1141335507.1719100800&semt=ais_user" alt="Cafe"></div>
+                                <div class="description">Cafe</div>
+                                <div class="amount">UZS 25,000</div>
+                            </div>
+                            <div class="expense-item">
+                                <div class="icon"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg" alt="Groceries"></div>
+                                <div class="description">Foods</div>
+                                <div class="amount">UZS 15,000</div>
+                            </div>
+                            <div class="expense-item">
+                                <div class="icon"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg" alt="Groceries"></div>
+                                <div class="description">Entertainment</div>
+                                <div class="amount">UZS 45,000</div>
+                            </div>
+                            <div class="expense-item">
+                                <div class="icon"><img src="https://www.norma.uz/img/00/69/464cce8cbe628b0c1bcb5891eee7.jpg" alt="Transport"></div>
+                                <div class="description">Transport</div>
+                                <div class="amount">UZS 5,000</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+        var options = {
+            series: [60, 25, 15,50,70,90],
+            chart: {
+                width: 380,
+                type: 'donut',
+            },
+            labels: ['Groceries', 'Cafe', 'Transport', 'Entertainment'],
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 300
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }]
+        };
+
+        var chart = new ApexCharts(document.querySelector("#expenseChart"), options);
+        chart.render();
+    </script>
+</body>
+</html>
