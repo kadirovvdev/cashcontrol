@@ -2,6 +2,15 @@ from django.db import models
 from users.models import CustomUser
 
 
+# class Category(models.Model):
+#     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+#     name = models.CharField(max_length=100)
+#     image = models.ImageField(upload_to='category_images/')
+#
+#     def __str__(self):
+#         return self.name
+
+
 class AccountBalance(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
@@ -12,13 +21,18 @@ class AccountBalance(models.Model):
         self.balance = income_total - expenses_total
         self.save()
 
+    def __str__(self):
+        return f'Account Balance for {self.user}'
+
+
 class Expense(models.Model):
     CATEGORY_CHOICES = [
-        ('Cafe', 'Cafe'),
-        ('Groceries', 'Groceries'),
+        ('Cafe&Restaurant', 'Cafe&Restaurant'),
+        ('Foods', 'Foods'),
         ('Transport', 'Transport'),
         ('Entertainment', 'Entertainment'),
         ('Utilities', 'Utilities'),
+        ('Other', 'Other'),
     ]
 
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)

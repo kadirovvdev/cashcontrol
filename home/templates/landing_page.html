@@ -121,7 +121,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
-        // Extracting data from Django template
+
         var expenseData = [
             {% for expense in expenses %}
             {
@@ -131,7 +131,7 @@
             {% endfor %}
         ];
 
-        // Preparing data for the chart
+
         var categories = [];
         var amounts = [];
 
@@ -140,7 +140,6 @@
             amounts.push(expense.amount);
         });
 
-        // ApexCharts options
         var options = {
             series: amounts,
             chart: {
