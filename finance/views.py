@@ -7,6 +7,7 @@ from django.views.generic import ListView
 from .models import Expense, Income, AccountBalance
 from .forms import ExpenseForm, IncomeForm
 
+
 class ExpenseListView(ListView):
     model = Expense
     template_name = 'dashboard.html'
@@ -32,7 +33,6 @@ class ExpenseListView(ListView):
         context['total_monthly'] = context['monthly_expenses'].aggregate(total=Sum('amount'))['total'] or 0
         context['total_yearly'] = context['yearly_expenses'].aggregate(total=Sum('amount'))['total'] or 0
 
-        # For calendar search
         date_from = self.request.GET.get('date_from')
         date_to = self.request.GET.get('date_to')
         if date_from and date_to:
@@ -56,6 +56,7 @@ class IncomeListView(ListView):
 
         return context
 
+
 def add_income(request):
     if request.method == 'POST':
         form = IncomeForm(request.POST)
@@ -73,6 +74,8 @@ def add_income(request):
 
     total_income = Income.total_income(request.user)
     return render(request, 'add_income.html', {'form': form, 'total_income': total_income})
+
+
 def add_expense(request):
     if request.method == 'POST':
         form = ExpenseForm(request.POST)

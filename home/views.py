@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from users.models import CustomUser
 from finance.models import *
 
+
 @login_required(login_url="users/login/")
 def landing_page(request):
     user = request.user
@@ -14,7 +15,7 @@ def landing_page(request):
         total_balance = 0
 
     total_income = Income.total_income(user)
-    total_expenses = Expense.total_expenses(user)  # Corrected this line
+    total_expenses = Expense.total_expenses(user)
     expenses = Expense.objects.filter(user=user)
 
     context = {
