@@ -141,6 +141,9 @@
                 <button type="submit">Search</button>
             </form>
         </div>
+        <div class="chart-container">
+            <canvas id="expenseChart"></canvas>
+        </div>
 
         {% if filtered_expenses %}
         <div class="category-section">
@@ -218,9 +221,7 @@
             </ul>
         </div>
 
-        <div class="chart-container">
-            <canvas id="expenseChart"></canvas>
-        </div>
+
 
         <div class="add-expense">
             <a href="{% url 'add_expense' %}">Add Expense</a>

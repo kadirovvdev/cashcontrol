@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -5,49 +7,53 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
-            background-color: #f7f7f7;
-            font-family: Arial, sans-serif;
+            background-color: #eef2f3;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         .navbar {
-            background-color: #619170;
+            background-color: #3b6978;
         }
         .navbar-brand, .nav-link {
             color: #fff !important;
         }
         .container {
-            margin-top: 20px;
+            margin-top: 30px;
         }
         .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
         }
-        .total-amount {
-            font-size: 2em;
+        .card-title {
             font-weight: bold;
         }
+        .total-amount {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        .donut-chart {
+            width: 100%;
+            height: 300px;
+        }
         .expense-list {
-            max-height: 400px;
+            max-height: 300px;
             overflow-y: auto;
         }
         .expense-item {
             display: flex;
             justify-content: space-between;
-            padding: 10px 20px;
+            padding: 10px;
             background-color: #fff;
             margin-bottom: 10px;
             border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
         }
         .expense-item .description {
-            flex: 1;
-            text-align: left;
+            font-weight: 500;
         }
         .expense-item .amount {
             font-weight: bold;
             color: #333;
-        }
-        .donut-chart {
-            width: 100%;
-            height: 300px;
         }
     </style>
 </head>
@@ -103,15 +109,17 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Expenses</h5>
-                        <div class="donut-chart" id="expenseChart"></div>
-                        <div class="expense-list">
-                            {% for expense in expenses %}
-                            <div class="expense-item">
-                                <div class="description">{{ expense.category }}</div>
-                                <div class="amount">UZS {{ expense.amount }}</div>
-                            </div>
-                            {% endfor %}
+                        <h5 class="card-title">Expenses Overview</h5>
+                        <div id="expenseChart" class="donut-chart"></div>
+                        <div class="expense-list mt-3">
+                            <div class="expense-list mt-3">
+    {% for expense in expenses %}
+    <div class="expense-item">
+        <div class="description">{{ expense.category }} -> {{ expense.description }}</div>
+        <div class="amount">UZS {{ expense.amount }}</div>
+    </div>
+    {% endfor %}
+</div>
                         </div>
                     </div>
                 </div>
@@ -119,49 +127,47 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var expenseData = [
+                {% for expense in expenses %}
+                {
+                    category: '{{ expense.category }}',
+                    amount: {{ expense.amount }}
+                },
+                {% endfor %}
+            ];
 
-        var expenseData = [
-            {% for expense in expenses %}
-            {
-                category: '{{ expense.category }}',
-                amount: {{ expense.amount }}
-            },
-            {% endfor %}
-        ];
+            var categories = expenseData.map(expense => expense.category);
+            var amounts = expenseData.map(expense => expense.amount);
 
-
-        var categories = [];
-        var amounts = [];
-
-        expenseData.forEach(function(expense) {
-            categories.push(expense.category);
-            amounts.push(expense.amount);
-        });
-
-        var options = {
-            series: amounts,
-            chart: {
-                width: 380,
-                type: 'donut',
-            },
-            labels: categories,
-            responsive: [{
-                breakpoint: 480,
-                options: {
-                    chart: {
-                        width: 300
-                    },
-                    legend: {
-                        position: 'bottom'
+            var options = {
+                series: amounts,
+                chart: {
+                    type: 'donut',
+                    height: 300,
+                },
+                labels: categories,
+                legend: {
+                    position: 'bottom'
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            height: 250
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
                     }
-                }
-            }]
-        };
+                }]
+            };
 
-        var chart = new ApexCharts(document.querySelector("#expenseChart"), options);
-        chart.render();
+            var chart = new ApexCharts(document.querySelector("#expenseChart"), options);
+            chart.render();
+        });
     </script>
 </body>
 </html>

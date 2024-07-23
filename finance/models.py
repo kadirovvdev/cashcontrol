@@ -2,15 +2,6 @@ from django.db import models
 from users.models import CustomUser
 
 
-# class Category(models.Model):
-#     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-#     name = models.CharField(max_length=100)
-#     image = models.ImageField(upload_to='category_images/')
-#
-#     def __str__(self):
-#         return self.name
-
-
 class AccountBalance(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
