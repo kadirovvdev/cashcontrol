@@ -16,7 +16,7 @@ def landing_page(request):
 
     total_income = Income.total_income(user)
     total_expenses = Expense.total_expenses(user)
-    expenses = Expense.objects.filter(user=user)
+    expenses = Expense.objects.filter(user=user).order_by('-date')
 
     context = {
         'total_balance': total_balance,
